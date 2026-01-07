@@ -1,0 +1,3 @@
+projectvenv/
+.env
+__pycache__/

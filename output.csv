@@ -1,0 +1,7 @@
+Name,Contact,Age,Gender,State,Weight,Height,Chief Complaint,Duration,Surgical History,Family History,Body Temperature,Blood Pressure,Allergies,Ongoing Medications,Patient_ID
+Female,Maharashtra,150 lbs,5’7”,Lower back pain,Approximately 2 months,,Family history of hypertension,98.6F,120/80mmHg,Penicillin,Lisinopril and Loratadine,,,,P001
+abc,908079865,34,Male,,0.0,0.0,Stomach ache,,,,,,,,P002
+Mr Tan Ah Kow,,55 years old,,,,,,,,"Divorced, living with son",,,,Unknown,P003
+Ved,67584590,33,Male,,59.0,165.0,Fever,,,,,,,,P004
+Mr Tan Ah Kow,,55 years old,,,,,,,,"Divorced, living with son",,,,Unknown,P005
+Ms. Smita Thakur,9780678934,35,Female,Maharashtra,150 lbs,5’7”,Lower back pain,Approximately 2 months,None,Family history of hypertension,98.6F,120/80mmHg,Penicillin,Lisinopril and Loratadine,P006

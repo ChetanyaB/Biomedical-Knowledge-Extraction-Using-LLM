@@ -1,0 +1,14 @@
+streamlit
+pandas
+reportlab
+pypdf2
+langchain-google-genai
+langchain
+langchain-openai
+langchain-text-splitters
+langchain-core
+langchain-community
+langchain-groq
+python-dotenv
+faiss-cpu
+pdfplumber

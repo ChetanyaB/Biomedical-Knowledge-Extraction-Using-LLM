@@ -1,0 +1,39 @@
+[
+    {
+        "patient_id": "11V8W6YT",
+        "question": "tell me medicine for fever",
+        "answer": "For treating a fever, over-the-counter medications such as acetaminophen (Tylenol) and ibuprofen (Advil, Motrin) are commonly used. These can help reduce fever and alleviate discomfort. \n\nHowever, it's important to consider the underlying cause of the fever. If the fever is due to an infection or another medical condition, it may require specific treatment. \n\nAlways make sure to follow the dosing instructions on the medication packaging and consult a healthcare professional if you have any concerns, if the fever persists for more than a few days, or if you experience other concerning symptoms. If you have specific health conditions or are taking other medications, it's wise to seek personalized advice from a healthcare provider.",
+        "approved": true
+    },
+    {
+        "patient_id": "11V8W6YT",
+        "question": "My BP has increased to 150/110 what should I do further and what medication should I take? ",
+        "answer": "I'm not a doctor, but I can provide some general suggestions. A blood pressure reading of 150/110 is considered high and may require medical attention. Here are some steps you can consider:\n\n1. **Seek Medical Advice**: It's important to contact your healthcare provider for personalized advice. They can assess your situation and determine the best course of action.\n\n2. **Lifestyle Changes**: In addition to medication, lifestyle changes can help manage high blood pressure. These may include:\n   - Reducing salt intake\n   - Eating a balanced diet rich in fruits, vegetables, and whole grains\n   - Maintaining a healthy weight\n   - Regular physical activity\n   - Limiting alcohol consumption and quitting smoking\n   - Managing stress through relaxation techniques or therapy\n\n3. **Medication**: Only a healthcare provider can prescribe the right medication for your specific condition. Common medications for high blood pressure include diuretics, ACE inhibitors, calcium channel blockers, and beta-blockers. Do not take any medication without consulting a doctor first.\n\n4. **Monitor Your Blood Pressure**: Keep track of your blood pressure regularly at home and follow your doctor\u2019s recommendations regarding monitoring.\n\nIf you have any concerning symptoms like severe headache, vision changes, chest pain, or shortness of breath, seek emergency medical care immediately.",
+        "approved": true
+    },
+    {
+        "patient_id": "pranjali_20250416015402",
+        "question": "I am having severe period cramps give medicine",
+        "answer": "I'm sorry to hear that you're experiencing severe cramps. While I can't prescribe medication, common over-the-counter options for period cramps include ibuprofen or naproxen. It's important to follow the dosage instructions on the packaging. If your pain is severe or persists, please consult a doctor for personalized advice and treatment options. Take care!",
+        "approved": true,
+        "timestamp": "2025-06-05T02:46:12.500812"
+    },
+    {
+        "patient_id": "P004",
+        "question": "give medicines for period cramps which are safe",
+        "answer": "For period cramps, also known as dysmenorrhea, there are several over-the-counter (OTC) medications and home remedies that can provide relief:\n\n### Over-the-Counter Medications:\n1. **Nonsteroidal Anti-Inflammatory Drugs (NSAIDs):**\n   - **Ibuprofen (Advil, Motrin)**\n   - **Naproxen (Aleve)**\n\n   These medications can help reduce pain and inflammation. Be sure to follow the recommended dosage instructions.\n\n2. **Acetaminophen (Tylenol):**\n   - This can be an alternative if you cannot take NSAIDs, though it may not be as effective for cramps.\n\n### Home Remedies:\n1. **Heat Therapy:**\n   - Applying a heating pad or hot water bottle to your lower abdomen can relax muscles and alleviate cramps.\n\n2. **Exercise:**\n   - Light exercise, like walking or stretching, can increase blood flow and reduce pain.\n\n3. **Herbal Teas:**\n   - Some find relief with herbal teas, such as chamomile, ginger, or peppermint tea.\n\n4. **Dietary Changes:**\n   - Increasing your intake of omega-3 fatty acids and magnesium, and maintaining a well-balanced diet can help.\n\n5. **Supplements:**\n   - Some studies suggest that magnesium, vitamin B1 (thiamine), and vitamin E may help reduce menstrual pain.\n\n### When to See a Doctor:\nIf your cramps are severe and do",
+        "approved": true
+    },
+    {
+        "patient_id": "P005",
+        "question": "medicines for period cramps",
+        "answer": "For managing period cramps (dysmenorrhea), several types of medications can be effective:\n\n1. **Nonsteroidal Anti-Inflammatory Drugs (NSAIDs)**: These are often the first line of treatment. Common options include:\n   - Ibuprofen (Advil, Motrin)\n   - Naproxen (Aleve)\n   - Aspirin\n\n2. **Acetaminophen**: This can also help relieve pain, but it may not be as effective as NSAIDs for cramps.\n\n3. **Hormonal Birth Control**: Hormonal contraceptives can help regulate or even eliminate periods, which can reduce cramps over time. Options include:\n   - Birth control pills\n   - Hormonal IUDs\n   - Birth control patches or rings\n\n4. **Over-the-Counter Combination Medications**: Some OTC medications combine NSAIDs with other ingredients for pain relief.\n\n5. **Prescription Medications**: If OTC medications are not effective, a healthcare provider may prescribe stronger pain relief options.\n\nBesides medications, other methods can also help alleviate cramps, such as heat therapy (heating pads), regular exercise, hydration, and dietary changes. If cramps are severe or disrupt daily life, it\u2019s important to consult a healthcare provider for further evaluation and personalized advice.",
+        "approved": true
+    },
+    {
+        "patient_id": "P005",
+        "question": "Give  medicine for fever",
+        "answer": "I'm not a doctor, but I can provide some general information. For treating a fever, common over-the-counter medications include:\n\n1. **Acetaminophen (Tylenol)** - It can help lower fever and relieve pain.\n2. **Ibuprofen (Advil, Motrin)** - This non-steroidal anti-inflammatory drug (NSAID) can also reduce fever and alleviate discomfort.\n3. **Aspirin** - Generally not recommended for children or teenagers with viral infections due to the risk of Reye's syndrome. \n\nEnsure you follow the dosing instructions on the label or consult with a healthcare professional for personalized advice. It's important to remain hydrated and rest. If the fever is very high, persistent, or accompanied by other worrying symptoms (like difficulty breathing, persistent vomiting, or rash), you should seek medical attention.",
+        "approved": true
+    }
+]
