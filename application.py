@@ -6,6 +6,10 @@ from PIL import Image
 import pandas as pd
 
 import base64
+import os
+
+# Run from any folder: resolve images and data relative to this file
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 def get_base64_image(image_path):
     with open(image_path, "rb") as f:
@@ -128,6 +132,7 @@ def doctor_menu():
     # Back button to return to main view
     if st.button("🔙 Back to Dashboard"):
         st.session_state.doc_view = "main"
+        st.rerun()
 
     if st.session_state.doc_view == "main":
         col1, col2, col3 = st.columns(3)
@@ -135,14 +140,17 @@ def doctor_menu():
         with col1:
             if card_button("Old Patient Entry", "📝"):
                 st.session_state.doc_view = "old_entry"
+                st.rerun()
 
         with col2:
             if card_button("Generate Report", "📄"):
                 st.session_state.doc_view = "report"
+                st.rerun()
 
         with col3:
             if card_button("Approve Questions", "✅"):
                 st.session_state.doc_view = "approve"
+                st.rerun()
 
     elif st.session_state.doc_view == "old_entry":
         old_patient_entry()
@@ -173,6 +181,7 @@ def patient_menu():
 
     if st.button("🔙 Back to Dashboard"):
         st.session_state.patient_view = "main"
+        st.rerun()
 
     if st.session_state.patient_view == "main":
         col1, col2, col3= st.columns(3)
@@ -180,14 +189,17 @@ def patient_menu():
         with col1:
             if card_button("Ask a Question", "💬"):
                 st.session_state.patient_view = "ask"
+                st.rerun()
 
         with col2:
             if card_button("View Responses", "📬"):
                 st.session_state.patient_view = "responses"
+                st.rerun()
 
         with col3:
             if card_button("PDF based Chatbot", "💬"):
                 st.session_state.patient_view = "chatbot"
+                st.rerun()
 
     elif st.session_state.patient_view == "ask":
         old_patient_chatbot()
@@ -209,6 +221,7 @@ def admin_menu():
 
     if st.button("🔙 Back to Dashboard"):
         st.session_state.admin_view = "main"
+        st.rerun()
 
     if st.session_state.admin_view == "main":
         col1, col2, col3 = st.columns(3)
@@ -216,14 +229,17 @@ def admin_menu():
         with col1:
             if card_button("New Patient Entry", "🆕"):
                 st.session_state.admin_view = "new"
+                st.rerun()
 
         with col2:
             if card_button("Entry via Report", "📤"):
                 st.session_state.admin_view = "report"
+                st.rerun()
 
         with col3:
             if card_button("Old Patient Search", "📝"):
                 st.session_state.admin_view = "update"
+                st.rerun()
 
     elif st.session_state.admin_view == "new":
         new_patient_entry()
