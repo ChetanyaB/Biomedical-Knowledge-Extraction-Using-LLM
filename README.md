@@ -11,7 +11,7 @@
 <p align="center">
   <img src="https://img.shields.io/badge/Python-3.10+-3776AB?logo=python&logoColor=white"/>
   <img src="https://img.shields.io/badge/Streamlit-App-FF4B4B?logo=streamlit&logoColor=white"/>
-  <img src="https://img.shields.io/badge/OpenAI-GPT-412991?logo=openai&logoColor=white"/>
+  <img src="https://img.shields.io/badge/OpenAI-GPT--4o--mini-412991?logo=openai&logoColor=white"/>
   <img src="https://img.shields.io/badge/LangChain-RAG-1C3C3C?logo=langchain&logoColor=white"/>
   <img src="https://img.shields.io/badge/FAISS-Vector%20Store-0467DF"/>
   <img src="https://img.shields.io/badge/tests-16%20passed-brightgreen"/>
@@ -149,6 +149,7 @@ Full output: [`docs/test_results.txt`](docs/test_results.txt).
 | Patient chatbot used the API **key string** as a client | `AttributeError` on every question | Uses a real OpenAI client, with error handling |
 | Patient ID based on the **last row** of the CSV | Could create duplicate IDs | Next ID = highest existing `P###` + 1 |
 | Groq model `llama3-8b-8192` | Model has been retired by Groq | Default changed to `llama-3.1-8b-instant` |
+| OpenAI `gpt-3.5-turbo` | **Retired by OpenAI**: PDF extraction and report chatbot returned 404 | Default `gpt-4o-mini`, configurable via `OPENAI_MODEL` |
 | Dashboard tiles needed **two clicks** | Confusing navigation | Immediate rerun after a tile is clicked |
 | "No pending entries" shown even when entries were listed | Misleading message | Shown only when the queue is empty |
 | `openai` missing from `requirements.txt` | Install could fail | Added |
@@ -171,8 +172,8 @@ Full output: [`docs/test_results.txt`](docs/test_results.txt).
 **Run it** (requires an API key):
 
 ```bash
-python eval/evaluate.py                                   # gpt-3.5-turbo (the app's default)
-python eval/evaluate.py --model gpt-4o-mini
+python eval/evaluate.py                                   # gpt-4o-mini (the app's default)
+python eval/evaluate.py --model gpt-4.1-mini
 python eval/evaluate.py --provider groq --model llama-3.1-8b-instant
 ```
 
