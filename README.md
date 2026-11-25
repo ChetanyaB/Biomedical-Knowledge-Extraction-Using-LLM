@@ -15,6 +15,7 @@
   <img src="https://img.shields.io/badge/LangChain-RAG-1C3C3C?logo=langchain&logoColor=white"/>
   <img src="https://img.shields.io/badge/FAISS-Vector%20Store-0467DF"/>
   <img src="https://img.shields.io/badge/tests-16%20passed-brightgreen"/>
+  <img src="https://img.shields.io/badge/NER%20F1%20(gpt--4o--mini)-1.00-blue"/>
 </p>
 
 ---
@@ -180,7 +181,24 @@ python eval/evaluate.py --provider groq --model llama-3.1-8b-instant
 The script writes the per-field table to `eval/results.md` and a chart to `docs/screenshots/evaluation.png`.
 
 <!-- EVAL_RESULTS_START -->
-> ⏳ **Results pending.** Run `python eval/evaluate.py` with your API key, then paste the table from `eval/results.md` here and add `![Evaluation](docs/screenshots/evaluation.png)`.
+### Results: `gpt-4o-mini` (10 reports, 150 fields)
+
+| Metric | Score |
+|---|---|
+| **Micro Precision** | **1.00** |
+| **Micro Recall** | **1.00** |
+| **Micro F1** | **1.00** |
+| Fields extracted correctly | 150 / 150 |
+| Per-field F1 (all 15 fields) | 1.00 |
+
+![Field-level F1](docs/screenshots/evaluation.png)
+
+**How to read this:** the LLM extraction prompt is reliable on **clean, typed, English consultation notes**. It found every field even though each report is free text with no field labels (for example, *"42 year old male residing in Maharashtra"* gives Age, Gender and State). The test set is small and synthetic, so real-world accuracy will be lower on:
+- scanned or handwritten reports, where OCR noise appears before the LLM sees the text,
+- reports with missing, conflicting or abbreviated values (e.g. *"BP 138/88, T 37°C"*),
+- non-English or mixed-language notes.
+
+**Next step:** add de-identified real reports with harder cases to `eval/ground_truth.json` and re-run `python eval/evaluate.py`.
 <!-- EVAL_RESULTS_END -->
 
 ---
