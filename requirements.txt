@@ -12,3 +12,4 @@ langchain-groq
 python-dotenv
 faiss-cpu
 pdfplumber
+openai

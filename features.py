@@ -19,19 +19,34 @@ import time
 import json
 import openai
 import sys
+from openai import OpenAI
 
 # Load environment variables
 load_dotenv()
 
-# Initialize 
-from langchain_groq import ChatGroq
-llm_google = ChatGroq(
-    model="llama3-8b-8192",
-    temperature=0.5,
-    api_key=os.getenv("GROQ_API_KEY")
-)
-# Initialize file path for the CSV
-csv_file = r"C:\Users\A\Downloads\BEProject (2)\BEProject\Folder (1)\Folder\output.csv"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+
+def get_openai_api_key():
+    """Read the OpenAI key from OPENAI_API_KEY (preferred) or the legacy openai_api_key."""
+    return os.getenv("OPENAI_API_KEY") or os.getenv("openai_api_key")
+
+
+def get_openai_client():
+    """Create the OpenAI client lazily so the app can start without a key."""
+    api_key = get_openai_api_key()
+    if not api_key:
+        raise RuntimeError("OpenAI API key not set. Add OPENAI_API_KEY to your .env file.")
+    return OpenAI(api_key=api_key)
+
+
+def get_groq_llm(model_name="llama-3.1-8b-instant", temperature=0.5):
+    """Create the Groq LLM lazily so the app can start without a key."""
+    return ChatGroq(model=model_name, temperature=temperature, api_key=os.getenv("GROQ_API_KEY"))
+
+
+# Patient records are stored next to the app (was a hard-coded Windows path)
+csv_file = os.getenv("MEDSWIFT_CSV", os.path.join(BASE_DIR, "output.csv"))
 
 # Function to append data to CSV
 def append_to_csv(data, csv_file):
@@ -101,7 +116,7 @@ def extract_text_from_pdfs(uploaded_pdfs):
 def analyze_pdf_with_llm(pdf_text):
     prompt = f"Extract the following information from the patient's medical report: Name, Contact, Age, Gender, State, Weight, Height, Chief Complaint, Duration, Surgical History, Family History, Body Temperature, Blood Pressure, Allergies, and Ongoing Medications. The report details are as follows: {pdf_text}."
     
-    llm_response = llm_google.invoke(prompt)
+    llm_response = get_groq_llm().invoke(prompt)
     llm_content = llm_response.content
 
     # Parsed patient data based on the LLM output
@@ -128,19 +143,15 @@ def analyze_pdf_with_llm(pdf_text):
 
 # Function to generate unique patient ID based on name and time
 def generate_patient_id(csv_file_path):
+    """Next ID after the highest existing P### (the old version used the last row only,
+    which could hand out an ID that already exists)."""
+    next_num = 1
     if os.path.exists(csv_file_path):
         df = pd.read_csv(csv_file_path)
         if not df.empty and "Patient_ID" in df.columns:
-            last_id = df["Patient_ID"].iloc[-1]
-            try:
-                next_num = int(last_id[1:]) + 1
-            except:
-                next_num = 1
-        else:
-            next_num = 1
-    else:
-        next_num = 1
-
+            nums = df["Patient_ID"].astype(str).str.extract(r"^P(\d+)$", expand=False).dropna().astype(int)
+            if not nums.empty:
+                next_num = nums.max() + 1
     return f"P{str(next_num).zfill(3)}"
 
 # Function to split text into chunks
@@ -157,7 +168,7 @@ def get_vector_store(text_chunks):
     for i, _ in enumerate(text_chunks):
         time.sleep(0.1)
         progress_bar.progress((i + 1) / total_chunks)
-    vector_store.save_local("faiss_index")
+    vector_store.save_local(os.path.join(BASE_DIR, "faiss_index"))
     st.success("Vector store saved successfully.")
     return vector_store
 
@@ -197,7 +208,7 @@ def user_input(user_question, model_name):
     embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
 
     vector_store = FAISS.load_local(
-        "faiss_index",
+        os.path.join(BASE_DIR, "faiss_index"),
         embeddings,
         allow_dangerous_deserialization=True
     )
@@ -289,10 +300,7 @@ import os
 from PyPDF2 import PdfReader
 import openai
 
-# Set your OpenAI API key
-OPENAI_API_KEY=os.getenv("openai_api_key")
-csv_file_path = r"C:\Users\A\Downloads\BEProject (2)\BEProject\Folder (1)\Folder\output.csv"
-client = OpenAI(api_key=OPENAI_API_KEY)
+csv_file_path = csv_file
 
 def extract_text_from_pdf(uploaded_pdf):
     text = ""
@@ -303,30 +311,35 @@ def extract_text_from_pdf(uploaded_pdf):
             text += page_text + "\n"
     return text
 
-def analyze_pdf_with_openai(pdf_text):
-    system_prompt = (
-        "You are a medical report parser. Extract the following fields from the input medical report text. "
-        "Return only valid JSON (no explanation, no markdown):\n"
-        "{\n"
-        "  \"Name\": \"\",\n"
-        "  \"Contact\": \"\",\n"
-        "  \"Age\": \"\",\n"
-        "  \"Gender\": \"\",\n"
-        "  \"State\": \"\",\n"
-        "  \"Weight\": \"\",\n"
-        "  \"Height\": \"\",\n"
-        "  \"Chief Complaint\": \"\",\n"
-        "  \"Duration\": \"\",\n"
-        "  \"Surgical History\": \"\",\n"
-        "  \"Family History\": \"\",\n"
-        "  \"Body Temperature\": \"\",\n"
-        "  \"Blood Pressure\": \"\",\n"
-        "  \"Allergies\": \"\",\n"
-        "  \"Ongoing Medications\": \"\"\n"
-        "}"
-    )
+EXTRACTION_PROMPT = (
+    "You are a medical report parser. Extract the following fields from the input medical report text. "
+    "Return only valid JSON (no explanation, no markdown):\n"
+    "{\n"
+    "  \"Name\": \"\",\n"
+    "  \"Contact\": \"\",\n"
+    "  \"Age\": \"\",\n"
+    "  \"Gender\": \"\",\n"
+    "  \"State\": \"\",\n"
+    "  \"Weight\": \"\",\n"
+    "  \"Height\": \"\",\n"
+    "  \"Chief Complaint\": \"\",\n"
+    "  \"Duration\": \"\",\n"
+    "  \"Surgical History\": \"\",\n"
+    "  \"Family History\": \"\",\n"
+    "  \"Body Temperature\": \"\",\n"
+    "  \"Blood Pressure\": \"\",\n"
+    "  \"Allergies\": \"\",\n"
+    "  \"Ongoing Medications\": \"\"\n"
+    "}"
+)
 
+
+def analyze_pdf_with_openai(pdf_text):
+    system_prompt = EXTRACTION_PROMPT
+
+    raw_content = ""
     try:
+        client = get_openai_client()
         response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
@@ -342,8 +355,9 @@ def analyze_pdf_with_openai(pdf_text):
         # 🛠 Debug log
         st.code(raw_content, language="json")
 
-        # Try JSON parsing
-        import json
+        # Try JSON parsing (strip ```json fences if the model adds them)
+        if raw_content.startswith("```"):
+            raw_content = raw_content.strip("`").removeprefix("json").strip()
         patient_data = json.loads(raw_content)
         return patient_data
 
@@ -555,7 +569,9 @@ def query_pdf_with_openai(text, user_query, api_key):
 # Streamlit chatbot app
 def chatbot_app():
     st.title("🧾 Patient Report Chatbot (with OpenAI)")
-    api_key =os.getenv("openai_api_key")
+    api_key = get_openai_api_key()
+    if not api_key:
+        st.warning("Set OPENAI_API_KEY in your .env file to use the chatbot.")
 
     uploaded_file = st.file_uploader("📄 Upload a Patient Report PDF", type=["pdf"])
     if uploaded_file and api_key:
@@ -582,11 +598,10 @@ import json
 import os
 import openai
 
-openai_client = os.getenv("openai_api_key")
-
-pending_chat_path = "pending_chats.json"
+pending_chat_path = os.getenv("MEDSWIFT_PENDING", os.path.join(BASE_DIR, "pending_chats.json"))
 
 def get_llm_response(prompt):
+    openai_client = get_openai_client()
     response = openai_client.chat.completions.create(
         model="gpt-4o-mini",
         messages=[
@@ -610,10 +625,10 @@ def get_llm_response(prompt):
                 ]
             }
         ],
-        max_tokens=300
+        max_tokens=300,
+        temperature=0,
     )
 
-    temperature=0
     description = response.choices[0].message.content
     
     return description
@@ -626,7 +641,11 @@ def old_patient_chatbot():
 
     if st.button("Submit Question"):
         if patient_id and user_query:
-            answer = get_llm_response(user_query)
+            try:
+                answer = get_llm_response(user_query)
+            except Exception as e:
+                st.error(f"❌ Could not get an answer from the LLM: {e}")
+                return
 
             chat_entry = {
                 "patient_id": patient_id,
@@ -710,7 +729,7 @@ def doctor_approval_panel():
     with open(pending_chat_path, "w") as f:
         json.dump(updated_entries, f, indent=4)
 
-    if not approved_any:
+    if not any(not e["approved"] for e in chat_entries):
         st.info("No pending entries or all have been reviewed.")
 
 """
