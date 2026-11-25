@@ -5,8 +5,8 @@ synthetic reports in eval/sample_reports and scores each of the 15 fields
 against eval/ground_truth.json.
 
 Usage (needs an API key in .env):
-    python eval/evaluate.py                       # OpenAI gpt-3.5-turbo (the app's default)
-    python eval/evaluate.py --model gpt-4o-mini
+    python eval/evaluate.py                       # OpenAI model from OPENAI_MODEL (default gpt-4o-mini, as in the app)
+    python eval/evaluate.py --model gpt-4.1-mini
     python eval/evaluate.py --provider groq --model llama-3.1-8b-instant
 
 Writes eval/results.json, eval/results.md and docs/screenshots/evaluation.png.
@@ -108,7 +108,11 @@ def main():
     ap.add_argument("--provider", choices=["openai", "groq"], default="openai")
     ap.add_argument("--model", default=None)
     args = ap.parse_args()
-    model = args.model or ("gpt-3.5-turbo" if args.provider == "openai" else "llama-3.1-8b-instant")
+    if args.provider == "openai":
+        from features import OPENAI_MODEL
+        model = args.model or OPENAI_MODEL
+    else:
+        model = args.model or "llama-3.1-8b-instant"
 
     truth = json.load(open(os.path.join(HERE, "ground_truth.json")))
     predictions, latencies = {}, []

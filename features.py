@@ -32,6 +32,11 @@ def get_openai_api_key():
     return os.getenv("OPENAI_API_KEY") or os.getenv("openai_api_key")
 
 
+# gpt-3.5-turbo has been retired by OpenAI (404 "model has been deprecated").
+# Override with OPENAI_MODEL in .env if this one is retired too.
+OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
+
+
 def get_openai_client():
     """Create the OpenAI client lazily so the app can start without a key."""
     api_key = get_openai_api_key()
@@ -341,7 +346,7 @@ def analyze_pdf_with_openai(pdf_text):
     try:
         client = get_openai_client()
         response = client.chat.completions.create(
-            model="gpt-3.5-turbo",
+            model=OPENAI_MODEL,
             messages=[
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": pdf_text}
@@ -558,7 +563,7 @@ def query_pdf_with_openai(text, user_query, api_key):
     """
 
     response = client.chat.completions.create(
-        model="gpt-3.5-turbo",
+        model=OPENAI_MODEL,
         messages=[{"role": "user", "content": prompt}],
         temperature=0.2,
         max_tokens=500,
@@ -603,7 +608,7 @@ pending_chat_path = os.getenv("MEDSWIFT_PENDING", os.path.join(BASE_DIR, "pendin
 def get_llm_response(prompt):
     openai_client = get_openai_client()
     response = openai_client.chat.completions.create(
-        model="gpt-4o-mini",
+        model=OPENAI_MODEL,
         messages=[
 
             {
