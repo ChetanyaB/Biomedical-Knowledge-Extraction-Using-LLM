@@ -71,8 +71,6 @@ flowchart LR
 |---|---|
 | ![New patient](docs/screenshots/07_new_patient_form.png) | ![Upload](docs/screenshots/08_report_upload.png) |
 
-> Screenshots use the fictional patients in [`eval/sample_reports`](eval/sample_reports). No real patient data is shown.
-
 ---
 
 ## 🚀 Getting started
