@@ -80,6 +80,9 @@ flowchart LR
 ```bash
 git clone https://github.com/ChetanyaB/Biomedical-Knowledge-Extraction-Using-LLM.git
 cd Biomedical-Knowledge-Extraction-Using-LLM
+python -m venv venv                # create a virtual environment
+venv/Scripts/activate              # Windows
+# source venv/bin/activate         # Linux / macOS
 pip install -r requirements.txt
 
 cp .env.example .env        # then add your OPENAI_API_KEY (and GROQ_API_KEY if used)
@@ -93,8 +96,6 @@ streamlit run application.py
 | Admin | `admin` | `admin@pass` |
 | Doctor | `doc1` | `doc@pass` |
 | Patient | `pat1` | `pat@pass` |
-
-> ⚠️ These credentials are hard-coded for demo purposes only. Use a real auth provider and hashed passwords before any real deployment.
 
 The app starts without API keys. Only the LLM features (report extraction and chatbots) need `OPENAI_API_KEY`.
 
@@ -119,7 +120,7 @@ The app starts without API keys. Only the LLM features (report extraction and ch
 
 ## ✅ Test case scenarios
 
-Run with `pytest -v`. No API key is needed because LLM calls are replaced with stubs.
+Run with `pytest -v`. 
 
 | # | Scenario | Expected result | Status |
 |---|---|---|---|
@@ -139,23 +140,6 @@ Run with `pytest -v`. No API key is needed because LLM calls are replaced with s
 | TC14 | Evaluation metric sanity check | Perfect = 1.0 F1, empty = 0 recall | ✅ Pass |
 
 Full output: [`docs/test_results.txt`](docs/test_results.txt).
-
-### 🐞 Issues found and fixed
-
-| Issue | Impact | Fix |
-|---|---|---|
-| `OpenAI(...)` was called before `from openai import OpenAI` | **App crashed on start-up** (`NameError`) | Import moved to the top; client is created only when needed |
-| OpenAI and Groq clients were built at import time | App would not start without **both** keys | Lazy `get_openai_client()` / `get_groq_llm()` helpers |
-| CSV path hard-coded to `C:\Users\A\Downloads\...` | Worked only on the original laptop | Path is relative to the project (override with `MEDSWIFT_CSV`) |
-| Patient chatbot used the API **key string** as a client | `AttributeError` on every question | Uses a real OpenAI client, with error handling |
-| Patient ID based on the **last row** of the CSV | Could create duplicate IDs | Next ID = highest existing `P###` + 1 |
-| Groq model `llama3-8b-8192` | Model has been retired by Groq | Default changed to `llama-3.1-8b-instant` |
-| OpenAI `gpt-3.5-turbo` | **Retired by OpenAI**: PDF extraction and report chatbot returned 404 | Default `gpt-4o-mini`, configurable via `OPENAI_MODEL` |
-| Dashboard tiles needed **two clicks** | Confusing navigation | Immediate rerun after a tile is clicked |
-| "No pending entries" shown even when entries were listed | Misleading message | Shown only when the queue is empty |
-| `openai` missing from `requirements.txt` | Install could fail | Added |
-
----
 
 ## 📊 Evaluation
 
@@ -212,8 +196,3 @@ The script writes the per-field table to `eval/results.md` and a chart to `docs/
 ## 🛠️ Tech stack
 
 `Python` · `Streamlit` · `OpenAI GPT` · `Groq (Llama 3.1)` · `LangChain` · `FAISS` · `Google Generative AI Embeddings` · `pdfplumber` · `PyPDF2` · `ReportLab` · `Pandas` · `pytest`
-
-## 👤 Author
-
-**Chetanya Bhadravati** · M.Tech AI & ML, Symbiosis Institute of Technology
-[LinkedIn](https://www.linkedin.com/in/chetanya-bhadravati-8a3703292) · [GitHub](https://github.com/ChetanyaB)
